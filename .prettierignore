@@ -1,0 +1,7 @@
+# Vendored third-party sources: keep byte-identical to upstream so they can be
+# re-synced from the registry/release they came from.
+components/ui/
+build/
+vendor/
+package-lock.json
+drizzle/meta/
