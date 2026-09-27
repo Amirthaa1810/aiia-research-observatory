@@ -23,11 +23,44 @@ Ethics decisions and uploaded evidence do not automatically activate a study. An
 
 Use Node 22.13 or later. Install from package-lock.json using `npm ci`, generate migrations
 using `npm run db:generate`, and build using `npm run build`. Start the development server
-with `npm run dev`. Local sign-in uses a loopback-only synthetic identity; hosted sign-in is
-dispatcher-owned. See `docs/openai-integration.md` for the optional Research Sahayak model
-integration.
+with `npm run dev`. Local sign-in uses a loopback-only synthetic identity; deployed sign-in uses
+an app-owned email and password. See `docs/openai-integration.md` for the optional Research
+Sahayak model integration.
 
-The D1 schema is maintained in db/schema.ts with versioned SQL migrations under drizzle/. Application requests use prepared statements. Record updates and audit inserts use atomic batches and matching version guards. Uploaded file bytes are stored in R2; file keys and metadata remain in D1.
+The D1 schema is maintained in db/schema.ts with versioned SQL migrations under migrations/.
+Application requests use prepared statements. Record updates and audit inserts use atomic batches
+and matching version guards. Uploaded file bytes are stored in R2; file keys and metadata remain
+in D1.
+
+## Deploying to Cloudflare
+
+The build target is a Cloudflare Worker. `npm run build` writes the worker to `dist/server`; the
+generated `dist/server/wrangler.json` already declares the `DB` and `BUCKET` bindings.
+
+1. `npx wrangler login`
+2. `npx wrangler d1 create site-creator-d1` and `npx wrangler r2 bucket create site-creator-r2`
+3. Put the returned database id in the `D1_DATABASE_ID` entry of your ignored `.env`, and the same
+   value in `wrangler.migrations.jsonc`. Local previews work without these and fall back to a
+   placeholder database.
+4. `npm run db:migrate` to create the schema
+5. `npm run deploy`, which builds and publishes the worker
+
+`wrangler.migrations.jsonc` is separate from `wrangler.jsonc` on purpose: the Cloudflare Vite
+plugin auto-discovers the latter and would merge its bindings with the ones `vite.config.ts`
+already supplies, producing duplicate `DB` and `BUCKET` bindings.
+
+### Authentication
+
+Accounts are app-owned. `auth_accounts` holds PBKDF2-SHA-256 password hashes with a per-account
+salt; nothing reversible is stored. Sessions are opaque random tokens kept in `settings` and sent
+as an HttpOnly `aiia_session` cookie, so disabling an account or signing out takes effect
+immediately instead of waiting for a stateless token to expire. Ten failed attempts per address
+in ten minutes are throttled. Only local and same-origin requests are accepted, and failed
+sign-ins return one generic message so responses cannot be used to discover which addresses have
+accounts.
+
+If a hosting dispatcher injects its own identity headers they still take priority, so the same
+build can be hosted either way.
 
 ## Validation performed
 
@@ -35,7 +68,9 @@ TypeScript validation and production build passed. Fifteen local integration che
 
 ## Team accounts
 
-Each person signs in using their own ChatGPT account. There are no shared demo passwords or app-owned password accounts. The verified hosting owner bootstraps the administrator membership; the first visitor cannot claim ownership. Existing owner records are retained as the shared institutional workspace.
+Each person signs in using their own account. There are no shared demo passwords. The verified
+hosting owner bootstraps the administrator membership; the first visitor cannot claim ownership.
+Existing owner records are retained as the shared institutional workspace.
 
 1. The owner adds the intended people to the private Site visitor allowlist.
 2. Each person signs in, provides their name and requests a role.

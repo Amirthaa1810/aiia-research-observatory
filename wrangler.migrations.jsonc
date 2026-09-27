@@ -1,0 +1,33 @@
+{
+	// Migration-only config.
+	//
+	// Deliberately NOT named wrangler.jsonc: the Cloudflare Vite plugin
+	// auto-discovers that filename and would merge these bindings with the ones
+	// vite.config.ts already supplies, producing duplicate DB/BUCKET bindings.
+	//
+	// The deployable worker config is generated into dist/server/wrangler.json at
+	// build time, and that file does not declare a migrations folder. This config
+	// exists so `wrangler d1 migrations apply` reads the same ./migrations SQL that
+	// Drizzle generates, locally and in production.
+	//
+	// After `npx wrangler d1 create`, replace the database_id below with the
+	// returned value. Binding names must match the ones the app reads (env.DB,
+	// env.BUCKET) and .openai/hosting.json.
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "aiia-research-observatory",
+	"compatibility_date": "2026-05-15",
+	"compatibility_flags": ["nodejs_compat"],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "site-creator-d1",
+			"database_id": "00000000-0000-4000-8000-000000000000"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "site-creator-r2"
+		}
+	]
+}

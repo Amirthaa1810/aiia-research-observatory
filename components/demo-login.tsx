@@ -63,13 +63,10 @@ export default function DemoLogin({ role, signedIn }: { role: Role; signedIn: bo
           {busy ? 'Opening your workspace…' : `Enter ${roles[role].label.toLowerCase()} demo →`}
         </button>
       ) : (
-        <a
-          className="primary"
-          target="_top"
-          href={'/signin-with-chatgpt?return_to=' + encodeURIComponent('/login/' + role)}
-        >
-          Sign in to try this role →
-        </a>
+        <p className="muted">
+          Sign in with your account above to open this role. Each address is registered on first
+          sign-in, and an administrator approves access before any data is visible.
+        </p>
       )}
       {error && <p role="alert">{error}</p>}
     </section>

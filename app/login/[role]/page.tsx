@@ -1,7 +1,8 @@
 import DemoLogin, { RealLoginButton } from '@/components/demo-login';
+import AccountSignIn, { SignOutButton } from '@/components/account-signin';
 import { roles, isRole } from '@/lib/permissions';
 import { notFound } from 'next/navigation';
-import { getChatGPTUser, chatGPTSignInPath } from '../../chatgpt-auth';
+import { getChatGPTUser } from '../../chatgpt-auth';
 export const dynamic = 'force-dynamic';
 export default async function RoleLogin({ params }: { params: Promise<{ role: string }> }) {
   const { role } = await params;
@@ -66,18 +67,10 @@ export default async function RoleLogin({ params }: { params: Promise<{ role: st
           <>
             <p className="signed-in-note">Signed in as {user.email}</p>
             <RealLoginButton role={role} />
-            <a
-              className="signout"
-              href={'/signout-with-chatgpt?return_to=' + encodeURIComponent('/login/' + role)}
-              target="_top"
-            >
-              Use a different account
-            </a>
+            <SignOutButton returnTo={'/login/' + role} />
           </>
         ) : (
-          <a className="primary" href={chatGPTSignInPath(path)} target="_top">
-            Sign in with your ChatGPT account →
-          </a>
+          <AccountSignIn nextPath={path} />
         )}
         <small>
           Each person uses their own account. Your administrator must approve your role. Choosing

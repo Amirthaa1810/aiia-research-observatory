@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import Sahayak from './sahayak';
 import { SessionBanner } from './demo-login';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
@@ -883,7 +884,7 @@ export default function Observatory({
             <a
               className="icon-btn"
               aria-label="Sign out"
-              href="/signout-with-chatgpt?return_to=/"
+              href="/signout?return_to=/"
               target="_top"
             >
               <LogOut size={17} />
@@ -917,9 +918,9 @@ export default function Observatory({
                 Manage studies, ethics reviews and safety monitoring in a private demonstration
                 workspace.
               </p>
-              <a className="primary" href="/signin-with-chatgpt?return_to=/" target="_top">
+              <Link className="primary" href="/login/administrator">
                 Sign in to open workspace <ArrowRight size={17} />
-              </a>
+              </Link>
               <small>Uses synthetic data. Not for live clinical operations.</small>
             </section>
           ) : (
@@ -1836,7 +1837,7 @@ export default function Observatory({
                             </button>
                             <a
                               className="signout"
-                              href="/signout-with-chatgpt?return_to=/"
+                              href="/signout?return_to=/"
                               target="_top"
                             >
                               <LogOut size={15} /> Sign out

@@ -108,7 +108,7 @@ export default function ParticipantWorkspace({
         <header>
           <b>Participant workspace</b>
           <a href="/">Switch portal</a>
-          <a target="_top" href="/signout-with-chatgpt?return_to=/">
+          <a target="_top" href="/signout?return_to=/">
             Sign out
           </a>
         </header>

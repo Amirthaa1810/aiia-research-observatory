@@ -120,9 +120,8 @@ export default function RoleHub({ member }: { member?: Membership | null }) {
           <div>
             <b>Personal sign-in, controlled access.</b>
             <p>
-              Sign in using your own ChatGPT account. Your administrator approves your role and
-              study assignments. Every role login includes a working demo with separate synthetic
-              records.
+              Sign in using your own account. Your administrator approves your role and study
+              assignments. Every role login includes a working demo with separate synthetic records.
             </p>
           </div>
         </div>

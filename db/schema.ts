@@ -57,3 +57,17 @@ export const teamMembers = sqliteTable(
   },
   (t) => [uniqueIndex('team_participant_assignment').on(t.participantId)],
 );
+export const authAccounts = sqliteTable(
+  'auth_accounts',
+  {
+    userId: text('userId').primaryKey(),
+    email: text('email').notNull(),
+    name: text('name').notNull(),
+    salt: text('salt').notNull(),
+    passwordHash: text('passwordHash').notNull(),
+    iterations: integer('iterations').notNull(),
+    createdAt: text('createdAt').notNull(),
+    disabled: integer('disabled').notNull().default(0),
+  },
+  (t) => [uniqueIndex('auth_accounts_email').on(t.email)],
+);

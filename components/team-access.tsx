@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { SessionBanner } from './demo-login';
 import ParticipantWorkspace from './participant-workspace';
 
@@ -100,7 +101,7 @@ export default function AccessGate({
           <a href="/">Choose another portal</a>
           <a
             href={
-              '/signout-with-chatgpt?return_to=' + encodeURIComponent('/login/' + requestedRole)
+              '/signout?return_to=' + encodeURIComponent('/login/' + requestedRole)
             }
             target="_top"
           >
@@ -157,19 +158,12 @@ export default function AccessGate({
         ) : state.anonymous ? (
           <>
             <p>
-              Use your own ChatGPT account. Your approved role determines the pages and records you
-              can access.
+              Use your own account. Your approved role determines the pages and records you can
+              access.
             </p>
-            <a
-              className="primary"
-              href={
-                '/signin-with-chatgpt?return_to=' +
-                encodeURIComponent('/workspace/' + requestedRole)
-              }
-              target="_top"
-            >
-              Sign in with ChatGPT <ArrowRight size={17} />
-            </a>
+            <Link className="primary" href={'/login/' + requestedRole}>
+              Sign in to continue <ArrowRight size={17} />
+            </Link>
             <small>
               Staff and participants use separate personal accounts. An administrator grants
               workspace access.
@@ -194,7 +188,7 @@ export default function AccessGate({
             <button className="outline" onClick={refresh}>
               <RefreshCw size={16} /> Check access
             </button>
-            <a className="signout" href="/signout-with-chatgpt?return_to=/" target="_top">
+            <a className="signout" href="/signout?return_to=/" target="_top">
               <LogOut size={16} /> Sign out / use another account
             </a>
           </>
@@ -248,7 +242,7 @@ export default function AccessGate({
               {saving ? 'Sending request…' : 'Request access'} <ArrowRight size={16} />
             </button>
             <small>Selecting a role does not grant access. Approval is required.</small>
-            <a className="signout" href="/signout-with-chatgpt?return_to=/" target="_top">
+            <a className="signout" href="/signout?return_to=/" target="_top">
               Use another account
             </a>
           </form>

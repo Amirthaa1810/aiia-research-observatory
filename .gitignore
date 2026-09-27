@@ -46,3 +46,6 @@ next-env.d.ts
 /outputs/
 /work/
 *.tsbuildinfo
+
+# Local test server logs
+*.log

@@ -5329,3 +5329,25 @@ tbody tr:hover {
 .role-login main > .signed-in-note {
   margin-top: 24px;
 }
+
+.account-form {
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid #dbe7e3;
+  border-radius: 16px;
+  background: #fbfdfc;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.account-form h3 {
+  margin: 0;
+}
+.account-form .primary {
+  justify-content: center;
+}
+.account-form small {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #60777b;
+}
